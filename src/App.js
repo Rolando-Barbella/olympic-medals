@@ -19,21 +19,47 @@ function App() {
   }, []);
 
   if(isLoading) {
-    return <p>...Loading</p>
+    return (
+      <div className="App App-container">
+        <p style={{color: '#fff'}}>...Cargando</p>
+      </div>
+    )
   }
 
   return (
     <div className="App">
-      <header className="App-header">
+      <section className="App-container">
         <h3>Cuadro de medallas</h3>
-        <div>
+        <table>
+          <tbody>
+            <tr>
+              <th></th>
+              <th></th>
+              <th>Oro | <br/></th>
+              <th>Plata | <br/></th>
+              <th>Bronce | <br/></th>
+              <th>Total</th>
+            </tr>
+          </tbody>
           {
-            countries.map(country => (
-              <p key={country.id}>{country.name}</p>
-            ))
+            countries.map(country => {
+              const { medals: [{ gold, silver, bronze }]} = country
+              return (
+                <tbody key={country.id}>
+                  <tr>
+                    <th>{country.flag}</th>
+                    <th>{country.name}</th>
+                    <th>{gold}</th>
+                    <th>{silver}</th>
+                    <th>{bronze}</th>
+                    <th>{gold + silver + bronze}</th>
+                  </tr>
+                </tbody>
+              )
+            })
           }
-        </div>
-      </header>
+        </table>
+      </section>
     </div>
   );
 }
