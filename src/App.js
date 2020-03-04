@@ -6,17 +6,33 @@ const URL = 'http://localhost:4000/countries';
 function App() {
   const [countries, setCountries] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchCountries = async() => {
-      const response = await fetch(URL);
-      const countries = await response.json();
-
-      setCountries(countries);
-      setIsLoading(false);
+      try {
+        const response = await fetch(URL);
+        const countries = await response.json();
+        const sortCountries = await countries.sort((a,b) => {
+          return b.medals[0].gold - a.medals[0].gold;
+        })
+  
+        setCountries(sortCountries);
+        setIsLoading(false);
+      } catch(e) {
+        setIsError(true);
+      }
     }
     fetchCountries();
   }, []);
+
+  if(isError) {
+    return (
+      <div className="App App-container">
+        <p style={{color: '#fff'}}>...Algo malo ocurrio</p>
+      </div>
+    )
+  }
 
   if(isLoading) {
     return (
