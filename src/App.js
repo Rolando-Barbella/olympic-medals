@@ -7,17 +7,12 @@ function App() {
   const [countries, setCountries] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [isEditMedals, setIsEditMedals] = useState({ 
-    showForm: false, 
-    gold: null, 
-    silver: null, 
-    bronze: null, 
-    flag: null, 
-    countryName: null 
-  });
+  const [isEditMedals, setIsEditMedals] = useState({ showForm: false, country: null });
   const [onChangeMedal, setOnChangeMedal] = useState({ gold: '', silver: '', bronze: ''});
+  const [didMedalUpdate, setDidMedalUpdate] = useState(false);
 
   useEffect(() => {
+    console.log('medallas')
     const fetchCountries = async() => {
       try {
         const response = await fetch(URL);
@@ -33,21 +28,48 @@ function App() {
       }
     }
     fetchCountries();
-  }, []);
+  }, [didMedalUpdate]);
 
   const editMedals = (country) => {
-    const { medals: [{ gold, silver, bronze }], flag, name} = country;
-
-    setIsEditMedals({ showForm: true, gold, silver, bronze, flag, countryName: name });
-    setOnChangeMedal({ gold, silver, bronze });
+    const { medals: [{ gold, silver, bronze }]} = country;
+    
+    setIsEditMedals({ showForm: true, country });
+    setOnChangeMedal({ gold, silver, bronze })
   }
 
-  const handleInputChange = (event, keyName) => {
+  const handleInpuChange = (event, keyName) => {
     event.persist();
-    setOnChangeMedal(() => {
-      return {[keyName]: event.target.value}
+    setOnChangeMedal((onChangeMedal) => {
+      return {...onChangeMedal, [keyName]: event.target.value }
     })
-  };
+  }
+
+  const updateMedals = async(id, country) => {
+    setDidMedalUpdate(false)
+    const response = await fetch(`${URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(country)
+    })
+
+    await response.json();
+    await setDidMedalUpdate(true);
+  }
+
+  const onSubmitMedals = ((event,{country}, newMedals)=> {
+    const { gold, silver, bronze } = newMedals;
+    
+    updateMedals(country.id, {
+      ...country, medals:[ {
+        gold,
+        silver,
+        bronze
+      }]
+    });
+    event.preventDefault();
+  });
 
   if(isError) {
     return (
@@ -108,35 +130,38 @@ function App() {
             isEditMedals.showForm &&
             <>
               <div className="country-selected-wrapper">
-                <span>{isEditMedals.flag}</span>
-                <p>{isEditMedals.countryName}</p>
+                <span>{isEditMedals.country.flag}</span>
+                <p>{isEditMedals.country.name}</p>
               </div>
-              <form action="" className="medal-form">
+              <form 
+                className="medal-form"
+                onSubmit={(event) => onSubmitMedals(event, isEditMedals, onChangeMedal)}
+              >
                 <div className="update-container">
                   <label htmlFor="">Oro:</label>
                   <input 
-                    type="text" 
-                    value={onChangeMedal.gold} 
+                    type="text"
                     className="medal-input"
-                    onChange={(event) => handleInputChange(event, 'gold')}
+                    value={onChangeMedal.gold}
+                    onChange={(event) => handleInpuChange(event, 'gold')}
                   />
                 </div>
                 <div className="update-container">
                   <label htmlFor="">Plata:</label>
                   <input 
                     type="text" 
-                    value={onChangeMedal.silver} 
                     className="medal-input"
-                    onChange={(event) => handleInputChange(event, 'silver')}
+                    value={onChangeMedal.silver}
+                    onChange={(event) => handleInpuChange(event, 'silver')}
                   />
                 </div>
                 <div className="update-container">
-                  <label htmlFor="">Bronce:</label>
+                  <label htmlFor="">Broce:</label>
                   <input 
                     type="text" 
-                    value={onChangeMedal.bronze} 
                     className="medal-input"
-                    onChange={(event) => handleInputChange(event, 'bronze')}
+                    value={onChangeMedal.bronze}
+                    onChange={(event) => handleInpuChange(event, 'bronze')}
                   />
                 </div>
                 <div className="update-container">
