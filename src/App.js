@@ -1,39 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
+import UseFecthCountries from './hooks/UseFetchCountries';
+import Title from './components/Title';
+import Message from './components/Messages';
+import Button from './components/Buttons/';
 import './App.css';
 
 const URL = 'http://localhost:4000/countries';
 
+const medalReducer = (state, action) => {
+  switch(action.type) {
+    case 'EDIT_MEDALS':
+      return {
+        ...state,
+        isEditMedals: action.payload,
+      }
+    default:
+      throw new Error();
+  }
+};
+
 function App() {
-  const [countries, setCountries] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [isEditMedals, setIsEditMedals] = useState({ showForm: false, country: null });
+  const [{ countries, isLoading, isError }, fetchCountries ] = UseFecthCountries();
   const [onChangeMedal, setOnChangeMedal] = useState({ gold: '', silver: '', bronze: ''});
-  const [didMedalUpdate, setDidMedalUpdate] = useState(false);
+
+  const [state, dispatch] = useReducer(medalReducer, {
+    isEditMedals:{ 
+      showForm: false, 
+      country: null, 
+      didMedalUpdate: false,
+      id: null,
+    }
+  });
 
   useEffect(() => {
-    console.log('medallas')
-    const fetchCountries = async() => {
-      try {
-        const response = await fetch(URL);
-        const countries = await response.json();
-        const sortCountries = await countries.sort((a,b) => {
-          return b.medals[0].gold - a.medals[0].gold;
-        })
-  
-        setCountries(sortCountries);
-        setIsLoading(false);
-      } catch(e) {
-        setIsError(true);
-      }
-    }
     fetchCountries();
-  }, [didMedalUpdate]);
+  }, [state.isEditMedals.didMedalUpdate, fetchCountries]);
 
   const editMedals = (country) => {
     const { medals: [{ gold, silver, bronze }]} = country;
     
-    setIsEditMedals({ showForm: true, country });
+    dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: true, country, didMedalUpdate: false }});
     setOnChangeMedal({ gold, silver, bronze })
   }
 
@@ -45,7 +51,6 @@ function App() {
   }
 
   const updateMedals = async(id, country) => {
-    setDidMedalUpdate(false)
     const response = await fetch(`${URL}/${id}`, {
       method: 'PUT',
       headers: {
@@ -55,42 +60,51 @@ function App() {
     })
 
     await response.json();
-    await setDidMedalUpdate(true);
+    await dispatch({ 
+      type: 'EDIT_MEDALS', 
+      payload:{ 
+        showForm: false, 
+        didMedalUpdate: true,
+        id
+      } 
+    });
   }
 
-  const onSubmitMedals = ((event,{country}, newMedals)=> {
+  const onSubmitMedals = ((event, { country }, newMedals)=> {
     const { gold, silver, bronze } = newMedals;
     
     updateMedals(country.id, {
       ...country, medals:[ {
-        gold,
-        silver,
-        bronze
+        gold: parseInt(gold),
+        silver: parseInt(silver),
+        bronze: parseInt(bronze),
       }]
     });
     event.preventDefault();
   });
 
+  const cancelUpdate = () =>  
+    dispatch({ type: 'EDIT_MEDALS', payload:{ 
+      showForm: false, 
+      didMedalUpdate: false 
+    } 
+  });
+
   if(isError) {
     return (
-      <div className="App App-container">
-        <p style={{color: '#fff'}}>...Algo malo ocurrio</p>
-      </div>
+      <Message text="...Algo malo ocurrio" />
     )
   }
 
   if(isLoading) {
     return (
-      <div className="App App-container">
-        <p style={{color: '#fff'}}>...Cargando</p>
-      </div>
+      <Message text="...Cargando" />
     )
   }
-
   return (
     <div className="App">
       <section className="App-container">
-        <h3>Cuadro de medallas</h3>
+        <Title text="Cuadro de medallas"/>
         <table width="800" border="1" cellPadding="1" cellSpacing="1">
           <tbody>
             <tr>
@@ -104,9 +118,12 @@ function App() {
           </tbody>
           {
             countries.map(country => {
-              const { medals: [{ gold, silver, bronze }]} = country
+              const { medals: [{ gold, silver, bronze }], id } = country
               return (
-                <tbody key={country.id}>
+                <tbody 
+                  key={country.id}
+                  className={state.isEditMedals.id === id ? 'country-update' : ''}
+                >
                   <tr>
                     <th>{country.flag}</th>
                     <th 
@@ -127,15 +144,15 @@ function App() {
         </table>
         <div className="medal-form-container">
           {
-            isEditMedals.showForm &&
+            state.isEditMedals.showForm &&
             <>
               <div className="country-selected-wrapper">
-                <span>{isEditMedals.country.flag}</span>
-                <p>{isEditMedals.country.name}</p>
+                <span>{state.isEditMedals.country.flag}</span>
+                <p>{state.isEditMedals.country.name}</p>
               </div>
               <form 
                 className="medal-form"
-                onSubmit={(event) => onSubmitMedals(event, isEditMedals, onChangeMedal)}
+                onSubmit={(event) => onSubmitMedals(event, state.isEditMedals, onChangeMedal)}
               >
                 <div className="update-container">
                   <label htmlFor="">Oro:</label>
@@ -156,7 +173,7 @@ function App() {
                   />
                 </div>
                 <div className="update-container">
-                  <label htmlFor="">Broce:</label>
+                  <label htmlFor="">Bronce:</label>
                   <input 
                     type="text" 
                     className="medal-input"
@@ -165,9 +182,18 @@ function App() {
                   />
                 </div>
                 <div className="update-container">
-                  <button className="update-btn">
-                    Actualizar
-                  </button>
+                  <Button 
+                    type="primary" 
+                    text="Actualizar"
+                    styles={{ marginRight: 10 }}
+                  />
+                </div>
+                <div className="update-container">
+                  <Button
+                    type="default"
+                    onClick={cancelUpdate}
+                    text="Cancelar"
+                  />
                 </div>
               </form>
             </>
