@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="App">
       <section className="App-container">
-        <table width="800" border="1" cellSpacing="1" cellPadding="1">
+        <table>
           <tbody>
             <tr>
               <th></th> 
