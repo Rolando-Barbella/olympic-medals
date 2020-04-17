@@ -9,6 +9,7 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [ isEditMedals, setIsEditMedal ] = useState({ showForm: false, country: null })
   const [onChangeMedal, setOnChangeMedal] = useState({ gold: '', silver: '', bronze: ''});
+  const [didMedalUpdate, setDidMedalUpdate] = useState(false);
 
   useEffect(() => {
     const fetchCountries = async() => {
@@ -26,7 +27,7 @@ function App() {
       }
     }
     fetchCountries();
-  }, []);
+  }, [didMedalUpdate]);
 
   const handleInpuChange = (event, keyName) => {
     event.persist();
@@ -34,6 +35,32 @@ function App() {
       return {...onChangeMedal, [keyName]: event.target.value }
     })
   }
+
+  const updateMedals = async (id, country) => {
+    setDidMedalUpdate(false);
+    const response = await fetch(`${URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(country)
+    });
+    await response.json();
+    await setDidMedalUpdate(true);
+  };
+
+  const onSubmitMedals = ((event, { country }, newMedals)=> {
+    const { gold, silver, bronze } = newMedals;
+    
+    updateMedals(country.id, {
+      ...country, medals:[ {
+        gold: parseInt(gold),
+        silver: parseInt(silver),
+        bronze: parseInt(bronze),
+      }]
+    });
+    event.preventDefault();
+  });
 
   if(isError) {
     return (
@@ -93,7 +120,10 @@ function App() {
                 <span>{isEditMedals.flag}</span>
                 <p>{isEditMedals.name}</p>
               </div>
-              <form className="medal-form">
+              <form 
+                className="medal-form"
+                onSubmit={(event) => onSubmitMedals(event, state.isEditMedals, onChangeMedal)}
+              >
                 <div className="update-container">
                   <label htmlFor="">Oro:</label>
                   <input 
