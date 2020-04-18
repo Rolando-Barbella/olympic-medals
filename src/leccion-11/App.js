@@ -134,11 +134,11 @@ function App() {
         </table>
         <div className="medal-form-container">
           {
-            state.isEditMedals.showIsForm &&
+            state.isEditMedals.showForm &&
             <>
               <div className="country-selected-wrapper">
-                <span>{state.isEditMedals.flag}</span>
-                <p>{state.isEditMedals.name}</p>
+                <span>{state.isEditMedals.country.flag}</span>
+                <p>{state.isEditMedals.country.name}</p>
               </div>
               <form 
                 className="medal-form"

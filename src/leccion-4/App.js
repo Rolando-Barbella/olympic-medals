@@ -27,11 +27,7 @@ function App() {
   }, []);
 
   if(isError) {
-    return (
-      <div className="App App-container">
-        <p style={{color: '#fff'}}>...Algo malo ocurrio</p>
-      </div>
-    )
+    return <p>...Algo malo ocurrio</p>
   }
 
   if(isLoading) {

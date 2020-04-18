@@ -86,7 +86,11 @@ function App() {
   }
 
   if(isLoading) {
-    return <p>...Loading</p>
+    return (
+      <div className="App App-container">
+        <p style={{color: '#fff'}}>...Loading</p>
+      </div>
+    )
   }
 
   return (
@@ -132,8 +136,8 @@ function App() {
             state.isEditMedals.showForm &&
             <>
               <div className="country-selected-wrapper">
-                <span>{state.isEditMedals.flag}</span>
-                <p>{state.isEditMedals.name}</p>
+                <span>{state.isEditMedals.country.flag}</span>
+                <p>{state.isEditMedals.country.name}</p>
               </div>
               <form 
                 className="medal-form"

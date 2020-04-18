@@ -109,7 +109,7 @@ function App() {
                     <th>{country.flag}</th>
                     <th 
                       onClick={() => editMedals(country)}
-                      className="edit-medal"
+                      className="edit-medals"
                     >
                       {country.name}
                     </th>

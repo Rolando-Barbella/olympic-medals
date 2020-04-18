@@ -17,7 +17,7 @@ function App() {
   const editMedals = (country) => {
     const { medals: [{ gold, silver, bronze }]} = country;
     
-    setIsEditMedal({ showForm: true, country});
+    setIsEditMedal({ showForm: true, country });
     setOnChangeMedal({ gold, silver, bronze });
   }
 
@@ -94,7 +94,7 @@ function App() {
                     <th>{country.flag}</th>
                     <th 
                       onClick={() => editMedals(country)}
-                      className="edit-medal"
+                      className="edit-medals"
                     >
                       {country.name}
                     </th>

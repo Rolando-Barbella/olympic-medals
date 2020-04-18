@@ -102,47 +102,47 @@ function App() {
     )
   }
   return (
-    <div className="App">
-      <section className="App-container">
+      <div className="App-container">
         <Title text="Cuadro de medallas"/>
-        <table width="800" border="1" cellPadding="1" cellSpacing="1">
-          <tbody>
-            <tr>
-              <th></th>
-              <th></th>
-              <th>Oro <br/></th>
-              <th>Plata <br/></th>
-              <th>Bronce <br/></th>
-              <th>Total</th>
-            </tr>
-          </tbody>
-          {
-            countries.map(country => {
-              const { medals: [{ gold, silver, bronze }], id } = country
-              return (
-                <tbody 
-                  key={country.id}
-                  className={state.isEditMedals.id === id ? 'country-update' : ''}
-                >
-                  <tr>
-                    <th>{country.flag}</th>
-                    <th 
-                      onClick={() => editMedals(country)}
-                      className="edit-medals"
-                    >
-                      {country.name}
-                    </th>
-                    <th>{gold}</th>
-                    <th>{silver}</th>
-                    <th>{bronze}</th>
-                    <th>{gold + silver + bronze}</th>
-                  </tr>
-                </tbody>
-              )
-            })
-          }
-        </table>
-        <div className="medal-form-container">
+        <section>
+          <table width="800" border="1" cellPadding="1" cellSpacing="1">
+            <tbody>
+              <tr>
+                <th></th>
+                <th></th>
+                <th>Oro <br/></th>
+                <th>Plata <br/></th>
+                <th>Bronce <br/></th>
+                <th>Total</th>
+              </tr>
+            </tbody>
+            {
+              countries.map(country => {
+                const { medals: [{ gold, silver, bronze }], id } = country
+                return (
+                  <tbody 
+                    key={country.id}
+                    className={state.isEditMedals.id === id ? 'country-update' : ''}
+                  >
+                    <tr>
+                      <th>{country.flag}</th>
+                      <th 
+                        onClick={() => editMedals(country)}
+                        className="edit-medals"
+                      >
+                        {country.name}
+                      </th>
+                      <th>{gold}</th>
+                      <th>{silver}</th>
+                      <th>{bronze}</th>
+                      <th>{gold + silver + bronze}</th>
+                    </tr>
+                  </tbody>
+                )
+              })
+            }
+          </table>
+          <div className="medal-form-container">
           {
             state.isEditMedals.showForm &&
             <>

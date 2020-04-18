@@ -13,35 +13,18 @@
   color: white;
 }
 
-button.edit-medals {
-  background:none;
-  color: #56B3D6;
-  border: none; 
-  padding: 0!important;
-  font: inherit;
-  cursor: pointer;
-  }
-
-button.edit-medals span{
-  margin-right: 5px;
-}
-
-tr.medals-col {
-  height: 30px;
-}
-
-
-th.edit-medal {
+th.edit-medals {
   cursor: pointer;
 }
 
-th.edit-medal:hover {
+th.edit-medals:hover {
   color: rgb(214, 212, 212);
 }
 
 .medal-form-container {
-  height: 200px;
-  width: 100%;
+  margin: 0;
+  text-align: left;
+  height: 100px;
 }
 
 .country-selected-wrapper {
@@ -61,13 +44,12 @@ form.medal-form {
   display: flex;
   flex-direction: row;
   flex: 1;
-  width: 100%;
+  width: 92%;
 }
 
 .update-container {
   display: flex;
   align-items: center;
-  width: 20%;
 }
 
 .update-container input { 
