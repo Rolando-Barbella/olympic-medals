@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import UseFecthCountries from './hooks/UseFetchCountries';
+import Button from './components/Buttons/';
 import './App.css';
 
 const URL = 'http://localhost:4000/countries';
@@ -169,15 +170,18 @@ function App() {
                   />
                 </div>
                 <div className="update-container">
-                  <button className="update-btn">
-                    Actualizar
-                  </button>
-                  <button 
-                    className="cancel-btn"
+                  <Button 
+                    type="primary" 
+                    text="Actualizar"
+                    styles={{ marginRight: 10 }}
+                  />
+                </div>
+                <div className="update-container">
+                  <Button
+                    type="default"
                     onClick={ () => dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: false }})}
-                  >
-                    Cancelar
-                  </button>
+                    text="Cancelar"
+                  />
                 </div>
               </form> 
             </>

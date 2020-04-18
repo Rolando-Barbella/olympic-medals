@@ -140,7 +140,10 @@ function App() {
                   <button className="update-btn">
                     Actualizar
                   </button>
-                  <button className="cancel-btn">
+                  <button 
+                    className="cancel-btn"
+                    onClick={() => setIsEditMedal({ showForm: false })}
+                  >
                     Cancelar
                   </button>
                 </div>
