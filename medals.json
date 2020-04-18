@@ -6,9 +6,9 @@
       "flag": "🇺🇸",
       "medals": [
         {
-          "gold": 13,
-          "silver": 1,
-          "bronze": 9
+          "gold": 10,
+          "silver": 2,
+          "bronze": 7
         }
       ]
     },
@@ -43,7 +43,7 @@
       "medals": [
         {
           "gold": 30,
-          "silver": 5,
+          "silver": 7,
           "bronze": 6
         }
       ]
@@ -54,9 +54,9 @@
       "flag": "🇨🇦",
       "medals": [
         {
-          "gold": 35,
+          "gold": 36,
           "silver": 21,
-          "bronze": 9
+          "bronze": 12
         }
       ]
     },
@@ -80,7 +80,7 @@
         {
           "gold": 7,
           "silver": 2,
-          "bronze": 0
+          "bronze": 5
         }
       ]
     },
@@ -90,7 +90,7 @@
       "flag": "🇪🇸",
       "medals": [
         {
-          "gold": 13,
+          "gold": 14,
           "silver": 9,
           "bronze": 1
         }

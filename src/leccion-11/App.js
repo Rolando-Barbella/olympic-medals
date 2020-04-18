@@ -48,7 +48,6 @@ function App() {
   }
 
   const updateMedals = async (id, country) => {
-    setDidMedalUpdate(false);
     const response = await fetch(`${URL}/${id}`, {
       method: 'PUT',
       headers: {
@@ -62,7 +61,6 @@ function App() {
       payload:{ 
         showForm: false, 
         didMedalUpdate: true,
-        id
       } 
     });
   };
@@ -89,7 +87,11 @@ function App() {
   }
 
   if(isLoading) {
-    return <p>...Loading</p>
+    return (
+      <div className="App App-container">
+        <p style={{color: '#fff'}}>...Cargando</p>
+      </div>
+    )
   }
 
   return (

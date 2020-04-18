@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import logo from '../logo.svg';
 import './App.css';
 
-const URL = 'http://localhost:4000/countries';
-
 function App() {
-  const [countries, setCountries] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCountries = async() => {
-      const response = await fetch(URL);
-      const countries = await response.json();
-      setCountries(countries);
-      setIsLoading(false)
-    }
-    fetchCountries();
-  },[]);
-
-  if(isLoading) {
-    return <p>...Loading</p>
-  }
-
   return (
     <div className="App">
-      <section className="App-header">
-        {
-          countries.map(country => (
-            <p key={country.id}>{country.name}</p>
-          ))
-        }
-      </section>
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
     </div>
   );
 }

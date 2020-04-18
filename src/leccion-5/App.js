@@ -36,7 +36,11 @@ function App() {
   }
 
   if(isLoading) {
-    return <p>...Loading</p>
+    return (
+      <div className="App App-container">
+        <p style={{color: '#fff'}}>...Loading</p>
+      </div>
+    )
   }
 
   return (
@@ -62,7 +66,7 @@ function App() {
                   <tr>
                     <th>{country.flag}</th>
                     <th
-                      onClick={() => setIsEditMedal({ showForm: true, flag: country.flag, name: country.name, gold  })} 
+                      onClick={() => setIsEditMedal({ showForm: true, country  })} 
                       className="edit-medal"
                     >
                       {country.name}

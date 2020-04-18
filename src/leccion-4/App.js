@@ -6,6 +6,7 @@ const URL = 'http://localhost:4000/countries';
 function App() {
   const [countries, setCountries] =  useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchCountries = async() => {

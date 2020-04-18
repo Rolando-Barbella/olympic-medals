@@ -13,23 +13,9 @@
   color: white;
 }
 
-button.edit-medals {
-  background:none;
-  color: #56B3D6;
-  border: none; 
-  padding: 0!important;
-  font: inherit;
-  cursor: pointer;
-  }
-
-button.edit-medals span{
-  margin-right: 5px;
-}
-
 tr.medals-col {
   height: 30px;
 }
-
 
 th.edit-medal {
   cursor: pointer;

@@ -47,7 +47,6 @@ function App() {
   }
 
   const updateMedals = async (id, country) => {
-    setDidMedalUpdate(false);
     const response = await fetch(`${URL}/${id}`, {
       method: 'PUT',
       headers: {
@@ -61,7 +60,6 @@ function App() {
       payload:{ 
         showForm: false, 
         didMedalUpdate: true,
-        id
       } 
     });
   };
@@ -131,7 +129,7 @@ function App() {
         </table>
         <div className="medal-form-container">
           {
-            state.isEditMedals.showIsForm &&
+            state.isEditMedals.showForm &&
             <>
               <div className="country-selected-wrapper">
                 <span>{state.isEditMedals.flag}</span>

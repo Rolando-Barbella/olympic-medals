@@ -29,6 +29,13 @@ function App() {
     fetchCountries();
   }, [didMedalUpdate]);
 
+  const editMedals = (country) => {
+    const { medals: [{ gold, silver, bronze }]} = country;
+    
+    setIsEditMedal({ showForm: true, country});
+    setOnChangeMedal({ gold, silver, bronze });
+  }
+
   const handleInpuChange = (event, keyName) => {
     event.persist();
     setOnChangeMedal((onChangeMedal) => {
@@ -71,7 +78,11 @@ function App() {
   }
 
   if(isLoading) {
-    return <p>...Loading</p>
+    return (
+      <div className="App App-container">
+        <p style={{color: '#fff'}}>...Loading</p>
+      </div>
+    )
   }
 
   return (
@@ -97,8 +108,8 @@ function App() {
                   <tr>
                     <th>{country.flag}</th>
                     <th 
-                      onClick={() => setIsEditMedal({ showForm: true, country })}
-                      className="edit-medals"
+                      onClick={() => editMedals(country)}
+                      className="edit-medal"
                     >
                       {country.name}
                     </th>
@@ -114,15 +125,15 @@ function App() {
         </table>
         <div className="medal-form-container">
           {
-            isEditMedals.showIsForm &&
+            isEditMedals.showForm &&
             <>
               <div className="country-selected-wrapper">
-                <span>{isEditMedals.flag}</span>
-                <p>{isEditMedals.name}</p>
+                <span>{isEditMedals.country.flag}</span>
+                <p>{isEditMedals.country.name}</p>
               </div>
               <form 
                 className="medal-form"
-                onSubmit={(event) => onSubmitMedals(event, state.isEditMedals, onChangeMedal)}
+                onSubmit={(event) => onSubmitMedals(event, isEditMedals, onChangeMedal)}
               >
                 <div className="update-container">
                   <label htmlFor="">Oro:</label>
