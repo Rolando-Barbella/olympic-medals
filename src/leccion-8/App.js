@@ -61,9 +61,9 @@ function App() {
     
     updateMedals(country.id, {
       ...country, medals:[ {
-        gold: parseInt(gold),
-        silver: parseInt(silver),
-        bronze: parseInt(bronze),
+        gold: gold,
+        silver: silver,
+        bronze: bronze,
       }]
     });
     event.preventDefault();

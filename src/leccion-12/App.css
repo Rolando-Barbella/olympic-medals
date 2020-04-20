@@ -18,7 +18,7 @@ th.edit-medals {
 }
 
 th.edit-medals:hover {
-  color: rgb(124, 124, 124);
+  color: rgb(214, 212, 212);
 }
 
 .medal-form-container {
@@ -67,19 +67,3 @@ form label {
   border: 0px solid #dbdbdb;
   margin-right: 10px;
 }
-
-.country-update {
-  animation: blinker 2s linear 0.1s;
-}
-
-@keyframes blinker {
-  20%{
-    opacity: 0;
-  }
-}
-
-
-
-
-
-

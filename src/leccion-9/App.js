@@ -1,23 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import UseFecthCountries from './hooks/UseFetchCountries';
 import './App.css';
 
 const URL = 'http://localhost:4000/countries';
 
 function App() {
-  const [{ countries, isLoading, isError }, fetchCountries ] = UseFecthCountries();
+  const [countries, setCountries] =  useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [ isEditMedals, setIsEditMedal ] = useState({ showForm: false, country: null })
   const [onChangeMedal, setOnChangeMedal] = useState({ gold: '', silver: '', bronze: ''});
   const [didMedalUpdate, setDidMedalUpdate] = useState(false);
 
   useEffect(() => {
+    const fetchCountries = async() => {
+      try {
+        const response = await fetch(URL);
+        const countries = await response.json();
+        const sortCountries = await countries.sort((a,b) => {
+          return b.medals[0].gold - a.medals[0].gold;
+        })
+  
+        setCountries(sortCountries);
+        setIsLoading(false);
+      } catch(e) {
+        setIsError(true);
+      }
+    }
     fetchCountries();
-  }, [didMedalUpdate, fetchCountries]);
+  }, [didMedalUpdate]);
 
   const editMedals = (country) => {
     const { medals: [{ gold, silver, bronze }]} = country;
     
-    setIsEditMedal({ showForm: true, country });
+    setIsEditMedal({ showForm: true, country});
     setOnChangeMedal({ gold, silver, bronze });
   }
 

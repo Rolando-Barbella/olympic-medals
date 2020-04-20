@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import UseFecthCountries from './hooks/UseFetchCountries';
-import Button from './components/Buttons/';
 import './App.css';
 
 const URL = 'http://localhost:4000/countries';
@@ -89,7 +88,7 @@ function App() {
   if(isLoading) {
     return (
       <div className="App App-container">
-        <p style={{color: '#fff'}}>...Cargando</p>
+        <p style={{color: '#fff'}}>...Loading</p>
       </div>
     )
   }
@@ -172,18 +171,15 @@ function App() {
                   />
                 </div>
                 <div className="update-container">
-                  <Button 
-                    type="primary" 
-                    text="Actualizar"
-                    styles={{ marginRight: 10 }}
-                  />
-                </div>
-                <div className="update-container">
-                  <Button
-                    type="default"
+                  <button className="update-btn">
+                    Actualizar
+                  </button>
+                  <button 
+                    className="cancel-btn"
                     onClick={ () => dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: false }})}
-                    text="Cancelar"
-                  />
+                  >
+                    Cancelar
+                  </button>
                 </div>
               </form> 
             </>
