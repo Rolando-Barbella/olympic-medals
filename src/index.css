@@ -7,7 +7,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html { 
+  background: url('https://images.dailyhive.com/20160811115655/rio-2016-olympic-medals.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+th {
+  font-weight: 400;
+  background:rgb(0,0,0,0.3);
+}
+
+h3 {
+  font-weight: 400;
 }

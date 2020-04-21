@@ -105,7 +105,7 @@ function App() {
       <div className="App-container">
         <Title text="Cuadro de medallas"/>
         <section>
-          <table width="800" border="1" cellPadding="1" cellSpacing="1">
+          <table width="800" border="0" cellPadding="1" cellSpacing="1">
             <tbody>
               <tr>
                 <th></th>

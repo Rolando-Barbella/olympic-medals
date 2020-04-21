@@ -5,26 +5,27 @@
 }
 
 .primary-btn {
-  border: 2px solid #207cca;
-  background-color:#207cca;
-  color: #fff;
+  border: 2px solid rgb(101, 182, 43);
+  background-color:rgb(101, 182, 43);
+  font-weight: 600;
 }
 
 .primary-btn:hover  {
   background-color:#fafafa;
-  color:#207cca;
+  color:rgb(101, 182, 43);
 }
 
 .default-btn {
-  color: #fff;
-  border: 2px solid #f4f5f7;
-  background-color:#292c2e;
+  border: 2px solid #fff;
+  background-color:#000;
+  font-weight: 600;
 }
 
 .default-btn:hover  {
-  background-color:#fafafa;
-  color:#292c2e;
+  background-color:#fff;
+  color:#000;
 }
+
 
 .danger-btn {
   color: #fff;
