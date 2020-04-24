@@ -2,7 +2,7 @@ Proyecto realizado con [Create React App](https://github.com/facebook/create-rea
 
 # Olympic Medals
 
-Una aplicación que se encarga de mostrar y actualizar un cuadro de medallas olimpicas de varios países
+Una aplicación que se encarga de mostrar y actualizar un cuadro de medallas olímpicas de varios países
 
 ## Comandos
 
@@ -27,5 +27,5 @@ Todo esto es logrado con la ayuda de [json-server](https://github.com/typicode/j
 
 Supongamos quieres mirar el código de la lección 3, entonces sigue estos pasos:
 
-- Dirigete al archivo al archivo madre `src/index`
-- Cambia la siguiente linea `import App from './App` por `import App from './leccion-3/App`
+- Dirigete al archivo madre `src/index.js`
+- Cambia la siguiente línea `import App from './App` por `import App from './leccion-3/App`
