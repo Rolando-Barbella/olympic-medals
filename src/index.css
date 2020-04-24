@@ -14,12 +14,3 @@ html {
   -o-background-size: cover;
   background-size: cover;
 }
-
-th {
-  font-weight: 400;
-  background:rgb(0,0,0,0.3);
-}
-
-h3 {
-  font-weight: 400;
-}
