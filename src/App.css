@@ -12,6 +12,10 @@
   color: white;
 }
 
+.App-container section{
+  max-width: 800px;
+}
+
 th {
   font-weight: 400;
   background:rgb(0,0,0,0.3);
