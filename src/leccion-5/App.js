@@ -6,19 +6,14 @@ const URL = 'http://localhost:4000/countries';
 function App() {
   const [countries, setCountries] =  useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [ isEditMedals, setIsEditMedal ] = useState({ showForm: false, country: null })
 
   useEffect(() => {
     const fetchCountries = async() => {
       try {
         const response = await fetch(URL);
         const countries = await response.json();
-        const sortCountries = await countries.sort((a,b) => {
-          return b.medals[0].gold - a.medals[0].gold;
-        })
   
-        setCountries(sortCountries);
+        setCountries(countries);
         setIsLoading(false);
       } catch(e) {
         setIsError(true);
@@ -27,50 +22,36 @@ function App() {
     fetchCountries();
   }, []);
 
-  if(isError) {
-    return (
-      <div className="App App-container">
-        <p style={{color: '#fff'}}>...Algo malo ocurrio</p>
-      </div>
-    )
-  }
-
   if(isLoading) {
     return (
       <div className="App App-container">
-        <p style={{color: '#fff'}}>...Loading</p>
+        <p style={{color: '#fff'}}>...Cargando</p>
       </div>
     )
   }
 
   return (
-    <div className="App-container">
-      <h3>Cuadro de medallas</h3>
-      <section>
-        <table width="800" border="1" cellSpacing="1" cellPadding="1">
+    <div className="App">
+      <section className="App-container">
+        <table>
           <tbody>
-            <tr className="medals-col">
+            <tr>
               <th></th> 
               <th></th> 
-              <th> Oro <br/></th> 
-              <th> Plata <br/></th> 
-              <th> Bronce <br/></th> 
+              <th> Oro | <br/></th> 
+              <th> Plata | <br/></th> 
+              <th> Bronce | <br/></th> 
               <th> Total <br/></th>
             </tr>
           </tbody>
           {
             countries.map(country => {
-              const { medals:[ { gold, silver, bronze } ] } = country;
+              const { medals:[ { gold, silver, bronze } ]} = country;
               return (
                 <tbody key={country.id}>
                   <tr>
                     <th>{country.flag}</th>
-                    <th
-                      onClick={() => setIsEditMedal({ showForm: true, country  })} 
-                      className="edit-medals"
-                    >
-                      {country.name}
-                    </th>
+                    <th>&nbsp;{country.name}</th>
                     <th>{gold}</th>
                     <th>{silver}</th>
                     <th>{bronze}</th>
@@ -81,51 +62,6 @@ function App() {
             })
           }
         </table>
-        <div className="medal-form-container">
-          {
-            isEditMedals.showForm &&
-            <>
-              <div className="country-selected-wrapper">
-                <span>{isEditMedals.country.flag}</span>
-                <p>{isEditMedals.country.name}</p>
-              </div>
-              <form className="medal-form">
-                <div className="update-container">
-                  <label htmlFor="">Oro:</label>
-                  <input 
-                    type="text"
-                    value={isEditMedals.country.medals[0].gold}
-                    className="medal-input" 
-                  />
-                </div>
-                <div className="update-container">
-                  <label htmlFor="">Plata:</label>
-                  <input 
-                    type="text"
-                    value={isEditMedals.country.medals[0].silver}
-                    className="medal-input" 
-                  />
-                </div>
-                <div className="update-container">
-                  <label htmlFor="">Bronce:</label>
-                  <input 
-                    type="text" 
-                    value={isEditMedals.country.medals[0].bronze}
-                    className="medal-input" 
-                  />
-                </div>
-                <div className="update-container">
-                  <button className="update-btn">
-                    Actualizar
-                  </button>
-                  <button className="cancel-btn">
-                    Cancelar
-                  </button>
-                </div>
-              </form> 
-            </>
-          }
-        </div>
       </section>
     </div>
   );

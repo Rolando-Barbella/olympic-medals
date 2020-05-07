@@ -1,3 +1,8 @@
+### Pequeńo código para la próxima lección
+
+Por favor copia este código para la próxima lección.
+
+```json
 {
   "countries": [
     {
@@ -105,18 +110,6 @@
           "gold": 6,
           "silver": 2,
           "bronze": 2
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "name": "Venezuela",
-      "flag": "🇻🇪",
-      "medals": [
-        {
-          "gold": 3,
-          "silver": 2,
-          "bronze": 1
         }
       ]
     }
