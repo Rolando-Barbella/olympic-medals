@@ -118,9 +118,6 @@ function App() {
                   <button className="update-btn">
                     Actualizar
                   </button>
-                  <button className="cancel-btn">
-                    Cancelar
-                  </button>
                 </div>
               </form> 
             </>

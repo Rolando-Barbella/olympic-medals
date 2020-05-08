@@ -13,6 +13,14 @@
   color: white;
 }
 
+.App-container section{
+  max-width: 800px;
+}
+
+tr.medals-col {
+  height: 30px;
+}
+
 th.edit-medals {
   cursor: pointer;
 }
@@ -22,9 +30,8 @@ th.edit-medals:hover {
 }
 
 .medal-form-container {
-  margin: 0;
-  text-align: left;
-  height: 100px;
+  height: 200px;
+  width: 100%;
 }
 
 .country-selected-wrapper {

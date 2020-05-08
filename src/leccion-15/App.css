@@ -13,12 +13,16 @@
   color: white;
 }
 
+.App-container section {
+  max-width: 800px;
+}
+
 th.edit-medals {
   cursor: pointer;
 }
 
 th.edit-medals:hover {
-  color: rgb(214, 212, 212);
+  color: rgb(124, 124, 124);
 }
 
 .medal-form-container {
@@ -68,31 +72,10 @@ form label {
   margin-right: 10px;
 }
 
-.update-btn, .cancel-btn {
-  position:relative;
-  padding: 6px 15px;
-  color:#fafafa;
-  margin-right: 10px;
-  cursor: pointer;
-}
 
-.update-btn {
-  border: 2px solid #207cca;
-  background-color:#207cca;
-}
 
-.cancel-btn {
-  border: 2px solid #f4f5f7;
-  background-color:#292c2e;
-}
 
-.update-btn:hover  {
-  background-color:#fafafa;
-  color:#207cca;
-}
 
-.cancel-btn:hover  {
-  background-color:#fafafa;
-  color:#292c2e;
-}
+
+
 

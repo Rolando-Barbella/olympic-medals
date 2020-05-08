@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import UseFecthCountries from './hooks/UseFetchCountries';
+import Title from './components/Title';
+import Message from './components/Messages';
+import Button from './components/Buttons';
 import './App.css';
 
 const URL = 'http://localhost:4000/countries';
@@ -19,12 +22,13 @@ const medalReducer = (state, action) => {
 function App() {
   const [{ countries, isLoading, isError }, fetchCountries ] = UseFecthCountries();
   const [onChangeMedal, setOnChangeMedal] = useState({ gold: '', silver: '', bronze: ''});
-  
+
   const [state, dispatch] = useReducer(medalReducer, {
     isEditMedals:{ 
       showForm: false, 
       country: null, 
       didMedalUpdate: false,
+      id: null,
     }
   });
 
@@ -46,23 +50,25 @@ function App() {
     })
   }
 
-  const updateMedals = async (id, country) => {
+  const updateMedals = async(id, country) => {
     const response = await fetch(`${URL}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(country)
-    });
+    })
+
     await response.json();
     await dispatch({ 
       type: 'EDIT_MEDALS', 
       payload:{ 
         showForm: false, 
         didMedalUpdate: true,
+        id
       } 
     });
-  };
+  }
 
   const onSubmitMedals = ((event, { country }, newMedals)=> {
     const { gold, silver, bronze } = newMedals;
@@ -77,61 +83,66 @@ function App() {
     event.preventDefault();
   });
 
+  const cancelUpdate = () =>  
+    dispatch({ type: 'EDIT_MEDALS', payload:{ 
+      showForm: false, 
+      didMedalUpdate: false 
+    } 
+  });
+
   if(isError) {
     return (
-      <div className="App App-container">
-        <p style={{color: '#fff'}}>...Algo malo ocurrio</p>
-      </div>
+      <Message text="...Algo malo ocurrio" />
     )
   }
 
   if(isLoading) {
     return (
-      <div className="App App-container">
-        <p style={{color: '#fff'}}>...Cargando</p>
-      </div>
+      <Message text="...Cargando" />
     )
   }
-
   return (
-    <div className="App-container">
-      <h3>Cuadro de medallas</h3>
-      <section>
-        <table width="800" border="1" cellSpacing="1" cellPadding="1">
-          <tbody>
-            <tr className="medals-col">
-              <th></th> 
-              <th></th> 
-              <th> Oro <br/></th> 
-              <th> Plata <br/></th> 
-              <th> Bronce <br/></th> 
-              <th> Total <br/></th>
-            </tr>
-          </tbody>
-          {
-            countries.map(country => {
-              const { medals:[ { gold, silver, bronze } ] } = country;
-              return (
-                <tbody key={country.id}>
-                  <tr>
-                    <th>{country.flag}</th>
-                    <th 
-                      onClick={() => editMedals(country)}
-                      className="edit-medals"
-                    >
-                      {country.name}
-                    </th>
-                    <th>{gold}</th>
-                    <th>{silver}</th>
-                    <th>{bronze}</th>
-                    <th>{gold + silver + bronze}</th>
-                  </tr>
-                </tbody>
-              )
-            })
-          }
-        </table>
-        <div className="medal-form-container">
+      <div className="App-container">
+        <Title text="Cuadro de medallas"/>
+        <section>
+          <table width="800" border="1" cellPadding="1" cellSpacing="1">
+            <tbody>
+              <tr>
+                <th></th>
+                <th></th>
+                <th>Oro <br/></th>
+                <th>Plata <br/></th>
+                <th>Bronce <br/></th>
+                <th>Total</th>
+              </tr>
+            </tbody>
+            {
+              countries.map(country => {
+                const { medals: [{ gold, silver, bronze }], id } = country
+                return (
+                  <tbody 
+                    key={country.id}
+                    className={state.isEditMedals.id === id ? 'country-update' : ''}
+                  >
+                    <tr>
+                      <th>{country.flag}</th>
+                      <th 
+                        onClick={() => editMedals(country)}
+                        className="edit-medals"
+                      >
+                        {country.name}
+                      </th>
+                      <th>{gold}</th>
+                      <th>{silver}</th>
+                      <th>{bronze}</th>
+                      <th>{gold + silver + bronze}</th>
+                    </tr>
+                  </tbody>
+                )
+              })
+            }
+          </table>
+          <div className="medal-form-container">
           {
             state.isEditMedals.showForm &&
             <>
@@ -171,17 +182,20 @@ function App() {
                   />
                 </div>
                 <div className="update-container">
-                  <button className="update-btn">
-                    Actualizar
-                  </button>
-                  <button 
-                    className="cancel-btn"
-                    onClick={() => dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: false, }})}
-                  >
-                    Cancelar
-                  </button>
+                  <Button 
+                    type="primary" 
+                    text="Actualizar"
+                    styles={{ marginRight: 10 }}
+                  />
                 </div>
-              </form> 
+                <div className="update-container">
+                  <Button
+                    type="default"
+                    onClick={cancelUpdate}
+                    text="Cancelar"
+                  />
+                </div>
+              </form>
             </>
           }
         </div>

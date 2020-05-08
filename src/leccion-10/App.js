@@ -1,23 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import UseFecthCountries from './hooks/UseFetchCountries';
 import './App.css';
 
 const URL = 'http://localhost:4000/countries';
 
 function App() {
-  const [{ countries, isLoading, isError }, fetchCountries ] = UseFecthCountries();
+  const [countries, setCountries] =  useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [ isEditMedals, setIsEditMedal ] = useState({ showForm: false, country: null })
   const [onChangeMedal, setOnChangeMedal] = useState({ gold: '', silver: '', bronze: ''});
-  const [didMedalUpdate, setDidMedalUpdate] = useState(false);
 
   useEffect(() => {
+    const fetchCountries = async() => {
+      try {
+        const response = await fetch(URL);
+        const countries = await response.json();
+        const sortCountries = await countries.sort((a,b) => {
+          return b.medals[0].gold - a.medals[0].gold;
+        })
+  
+        setCountries(sortCountries);
+        setIsLoading(false);
+      } catch(e) {
+        setIsError(true);
+      }
+    }
     fetchCountries();
-  }, [didMedalUpdate, fetchCountries]);
+  }, []);
 
   const editMedals = (country) => {
     const { medals: [{ gold, silver, bronze }]} = country;
     
-    setIsEditMedal({ showForm: true, country });
+    setIsEditMedal({ showForm: true, country});
     setOnChangeMedal({ gold, silver, bronze });
   }
 
@@ -27,32 +41,6 @@ function App() {
       return {...onChangeMedal, [keyName]: event.target.value }
     })
   }
-
-  const updateMedals = async (id, country) => {
-    setDidMedalUpdate(false);
-    const response = await fetch(`${URL}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(country)
-    });
-    await response.json();
-    await setDidMedalUpdate(true);
-  };
-
-  const onSubmitMedals = ((event, { country }, newMedals)=> {
-    const { gold, silver, bronze } = newMedals;
-    
-    updateMedals(country.id, {
-      ...country, medals:[ {
-        gold: parseInt(gold),
-        silver: parseInt(silver),
-        bronze: parseInt(bronze),
-      }]
-    });
-    event.preventDefault();
-  });
 
   if(isError) {
     return (
@@ -116,10 +104,7 @@ function App() {
                 <span>{isEditMedals.country.flag}</span>
                 <p>{isEditMedals.country.name}</p>
               </div>
-              <form 
-                className="medal-form"
-                onSubmit={(event) => onSubmitMedals(event, isEditMedals, onChangeMedal)}
-              >
+              <form className="medal-form">
                 <div className="update-container">
                   <label htmlFor="">Oro:</label>
                   <input 
@@ -151,10 +136,7 @@ function App() {
                   <button className="update-btn">
                     Actualizar
                   </button>
-                  <button 
-                    className="cancel-btn"
-                    onClick={() => setIsEditMedal({ showForm: false })}
-                  >
+                  <button className="cancel-btn">
                     Cancelar
                   </button>
                 </div>

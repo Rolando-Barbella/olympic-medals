@@ -1,43 +1,40 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import UseFecthCountries from './hooks/UseFetchCountries';
-import Button from './components/Buttons';
 import './App.css';
 
 const URL = 'http://localhost:4000/countries';
 
-const medalReducer = (state, action) => {
-  switch(action.type) {
-    case 'EDIT_MEDALS':
-      return {
-        ...state,
-        isEditMedals: action.payload,
-      }
-    default:
-      throw new Error();
-  }
-};
-
 function App() {
-  const [{ countries, isLoading, isError }, fetchCountries ] = UseFecthCountries();
+  const [countries, setCountries] =  useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [ isEditMedals, setIsEditMedal ] = useState({ showForm: false, country: null });
   const [onChangeMedal, setOnChangeMedal] = useState({ gold: '', silver: '', bronze: ''});
-  
-  const [state, dispatch] = useReducer(medalReducer, {
-    isEditMedals:{ 
-      showForm: false, 
-      country: null, 
-      didMedalUpdate: false,
-    }
-  });
+  const [didMedalUpdate, setDidMedalUpdate] = useState(false);
 
   useEffect(() => {
+    const fetchCountries = async() => {
+      try {
+        const response = await fetch(URL);
+        const countries = await response.json();
+        const sortCountries = await countries.sort((a,b) => {
+          return b.medals[0].gold - a.medals[0].gold;
+        })
+  
+        setCountries(sortCountries);
+        setIsLoading(false);
+      } catch(e) {
+        setIsError(true);
+      }
+    }
     fetchCountries();
-  }, [state.isEditMedals.didMedalUpdate, fetchCountries]);
+  }, [didMedalUpdate]);
 
   const editMedals = (country) => {
     const { medals: [{ gold, silver, bronze }]} = country;
     
-    dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: true, country, didMedalUpdate: false }});
-    setOnChangeMedal({ gold, silver, bronze })
+    setIsEditMedal({ showForm: true, country });
+    setOnChangeMedal({ gold, silver, bronze });
   }
 
   const handleInpuChange = (event, keyName) => {
@@ -48,6 +45,7 @@ function App() {
   }
 
   const updateMedals = async (id, country) => {
+    setDidMedalUpdate(false);
     const response = await fetch(`${URL}/${id}`, {
       method: 'PUT',
       headers: {
@@ -56,13 +54,7 @@ function App() {
       body: JSON.stringify(country)
     });
     await response.json();
-    await dispatch({ 
-      type: 'EDIT_MEDALS', 
-      payload:{ 
-        showForm: false, 
-        didMedalUpdate: true,
-      } 
-    });
+    await setDidMedalUpdate(true);
   };
 
   const onSubmitMedals = ((event, { country }, newMedals)=> {
@@ -89,7 +81,7 @@ function App() {
   if(isLoading) {
     return (
       <div className="App App-container">
-        <p style={{color: '#fff'}}>...Cargando</p>
+        <p style={{color: '#fff'}}>...Loading</p>
       </div>
     )
   }
@@ -134,15 +126,15 @@ function App() {
         </table>
         <div className="medal-form-container">
           {
-            state.isEditMedals.showForm &&
+            isEditMedals.showForm &&
             <>
               <div className="country-selected-wrapper">
-                <span>{state.isEditMedals.country.flag}</span>
-                <p>{state.isEditMedals.country.name}</p>
+                <span>{isEditMedals.country.flag}</span>
+                <p>{isEditMedals.country.name}</p>
               </div>
               <form 
                 className="medal-form"
-                onSubmit={(event) => onSubmitMedals(event, state.isEditMedals, onChangeMedal)}
+                onSubmit={(event) => onSubmitMedals(event, isEditMedals, onChangeMedal)}
               >
                 <div className="update-container">
                   <label htmlFor="">Oro:</label>
@@ -172,18 +164,15 @@ function App() {
                   />
                 </div>
                 <div className="update-container">
-                  <Button 
-                    type="primary" 
-                    text="Actualizar"
-                    styles={{ marginRight: 10 }}
-                  />
-                </div>
-                <div className="update-container">
-                  <Button
-                    type="default"
-                    onClick={ () => dispatch({ type: 'EDIT_MEDALS', payload:{ showForm: false }})}
-                    text="Cancelar"
-                  />
+                  <button className="update-btn">
+                    Actualizar
+                  </button>
+                  <button 
+                    className="cancel-btn"
+                    onClick={() => setIsEditMedal({ showForm: false })}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               </form> 
             </>

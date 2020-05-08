@@ -29,7 +29,7 @@ function App() {
         <div>
           {
             countries.map(country => (
-              <p>{country}</p>
+              <p>{country.name}</p>
             ))
           }
         </div>
